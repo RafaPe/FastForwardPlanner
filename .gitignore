@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+#Ignore jupyter checkpoints
+/notebooks/.ipynb_checkpoints/
