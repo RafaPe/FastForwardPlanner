@@ -94,9 +94,15 @@ def build_plan_graph(state:List[Proposition], goal:List[Proposition], actions:Li
             break
         
         i += 1
-    
             
     return graph_levels
+
+def graph_heuristic(state:List[Proposition], goal:List[Proposition], actions:List[Action]) -> int:
+    graph = build_plan_graph(state, goal, actions)
+    if len(graph) > 0:
+        return len(graph) - 1
+    else:
+        return float('inf')
 
 def A_star(initial_node:Node, goal:List[Proposition], actions:List[Action]) -> str:
     frontier = [initial_node]
