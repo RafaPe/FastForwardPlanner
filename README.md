@@ -5,14 +5,16 @@ Este repositorio implementa un enfoque de planificación inspirado en los planif
 Llamaremos planificación al proceso de búsqueda y articulación de una secuencia de acciones que permitan alcanzar un objetivo.
 Para un problema de planificación necesitaremos proposiciones (las cuales llamaremos literales), que describan los estados, y acciones, las cuales serán operaciones que cambian los literales (alteran el estado). 
 
-Para la definición de las literales y acciones se usa generalmente el lenguaje STRIPS (STandford Research Institute Problem Solver), pero se ha visto que este no presenta la suficiente expresividad para algunos problemas, por lo cual se han desarrollado extensiones de este como sería el el ADL (Action Description Language)
+En el campo de la planificación, el lenguaje base es el STRIPS (STanford Research Institute Problem Solver), que aunque es ampliamente utilizado, a veces no proporciona la suficiente expresividad para abordar ciertos problemas complejos. Como resultado, se han desarrollado extensiones más avanzadas, como el Action Description Language (ADL).
 
-Dentro de los algoritmos planificación, el base es el Graph Plan, el cual se basa en la construcción de la gráfica de planeación y el lenguaje ADL. Este algoritmo presenta mucha complejidad por lo cual se construyó una versión relajada que inspiró a los llamados Fast Forward Planner. Estos utilizan la idea de Graph Plan pero en una versión relajada que se usa como heurística.
+Dentro de los algoritmos de planificación, uno de los más fundamentales es el _GraphPlan_. Este algoritmo se centra en la construcción de una gráfica de planificación que representa las posibles secuencias de acciones para alcanzar un objetivo. Sin embargo, debido a su complejidad computacional, se desarrolló una versión simplificada que sirvió de inspiración para los llamados Fast Forward Planners.
 
-El algoritmo A* es un algoritmo de búsqueda heurística utilizado para encontrar la ruta más corta en un grafo. A* utiliza una función de costo \( f(n) = g(n) + h(n) \), donde \( g(n) \) es el costo desde el nodo inicial hasta el nodo actual \( n \) y \( h(n) \) es una estimación heurística del costo desde \( n \) hasta el nodo objetivo. Selecciona los nodos a explorar basándose en esta función, priorizando aquellos que parecen más prometedores para llegar al objetivo con el menor costo total, lo que lo hace muy efectivo para problemas de planificación.
+Los Fast Forward Planners adoptan la idea central del _GraphPlan_ pero utilizan una versión simplificada y relajada para construir una heurística eficiente. Esta heurística ayuda a guiar la búsqueda hacia soluciones más rápidas en problemas complejos de planificación.
+
+El algoritmo A* es un algoritmo de búsqueda heurística utilizado para encontrar la ruta más corta en un grafo. A* utiliza una función de costo $f(n) = g(n) + h(n)$, donde $ g(n) $ es el costo desde el nodo inicial hasta el nodo actual $ n $ y $ h(n) $ es una estimación heurística del costo desde $ n $ hasta el nodo objetivo. Selecciona los nodos a explorar basándose en esta función, priorizando aquellos que parecen más prometedores para llegar al objetivo con el menor costo total, lo que lo hace muy efectivo para problemas de planificación.
 
 ## Algoritmo
-El algoritmo usa la búsqueda A* clásica de la siguiente manera
+El algoritmo usa la búsqueda A* clásica de la siguiente manera:
 ```
 función FastForward_A*(estado_inicial, objetivo, acciones):
     frontera ← [estado_inicial]
