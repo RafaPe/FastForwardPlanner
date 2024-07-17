@@ -11,7 +11,7 @@ Dentro de los algoritmos de planificación, uno de los más fundamentales es el 
 
 Los Fast Forward Planners adoptan la idea central del _GraphPlan_ pero utilizan una versión simplificada y relajada para construir una heurística eficiente. Esta heurística ayuda a guiar la búsqueda hacia soluciones más rápidas en problemas complejos de planificación.
 
-El algoritmo A* es un algoritmo de búsqueda heurística utilizado para encontrar la ruta más corta en un grafo. A* utiliza una función de costo $f(n) = g(n) + h(n)$, donde $ g(n) $ es el costo desde el nodo inicial hasta el nodo actual $ n $ y $ h(n) $ es una estimación heurística del costo desde $ n $ hasta el nodo objetivo. Selecciona los nodos a explorar basándose en esta función, priorizando aquellos que parecen más prometedores para llegar al objetivo con el menor costo total, lo que lo hace muy efectivo para problemas de planificación.
+El algoritmo A* es un algoritmo de búsqueda heurística utilizado para encontrar la ruta más corta en un grafo. A* utiliza una función de costo $f(n) = g(n) + h(n)$, donde $g(n)$ es el costo desde el nodo inicial hasta el nodo actual $n$ y $h(n)$ es una estimación heurística del costo desde $n$ hasta el nodo objetivo. Selecciona los nodos a explorar basándose en esta función, priorizando aquellos que parecen más prometedores para llegar al objetivo con el menor costo total, lo que lo hace muy efectivo para problemas de planificación.
 
 ## Algoritmo
 El algoritmo usa la búsqueda A* clásica de la siguiente manera:
