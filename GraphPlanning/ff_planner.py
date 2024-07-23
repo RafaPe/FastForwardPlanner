@@ -104,7 +104,7 @@ def graph_heuristic(state:List[Proposition], goal:List[Proposition], actions:Lis
     else:
         return float('inf')
 
-def A_star(initial_node:Node, goal:List[Proposition], actions:List[Action]) -> str:
+def fastforward_A_star(initial_node:Node, goal:List[Proposition], actions:List[Action]) -> str:
     frontier = [initial_node]
     while len(frontier) > 0:
         node = frontier.pop(0)

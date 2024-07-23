@@ -1,1 +1,1 @@
-from .ff_planner import Proposition, Action, Node, A_star
+from .ff_planner import Proposition, Action, Node, fastforward_A_star
