@@ -48,3 +48,11 @@ A continuación, se presenta un ejemplo (ver imagen) que ilustra cómo se calcul
 <p align="center">
 <img src="images/ffp.png" width="500" height="430">
 </p>
+
+### Ejemplos
+
+Para demostrar la aplicación de este algoritmo, hemos realizado algunos ejemplos implementados en libretas de Jupyter. Si está interesado en la implementación del algoritmo y el código, a continuación se enumeran estos ejemplos. Haga clic en los enlaces para ver las libretas correspondientes:
+
+- [Mundo del robot](notebooks/Robot.ipynb)
+- [Mundo de los bloques](notebooks/BlockWorld.ipynb)
+- [Planear cena](notebooks/DinnerPlanning.ipynb)
