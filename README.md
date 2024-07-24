@@ -49,7 +49,7 @@ A continuación, se presenta un ejemplo (ver imagen) que ilustra cómo se calcul
 <img src="images/ffp.png" width="500" height="430">
 </p>
 
-En este caso se puede observar que la menor heurística es la correspondiente al nuevo estado donde la gráfica de planeación nos indica que con las acciones se podría llegar al objetivo en el siguiente nivel. 
+En este caso se puede observar que la menor heurística es la correspondiente al nuevo estado donde la gráfica de planeación nos indica que se podría llegar al objetivo en el siguiente nivel. 
 
 ## Ejemplos
 
