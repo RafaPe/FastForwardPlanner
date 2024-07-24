@@ -7,7 +7,7 @@ Para resolver un problema de planificación, necesitamos proposiciones (llamadas
 
 En el campo de la planificación, el lenguaje base es el [STanford Research Institute Problem Solver (STRIPS)](https://ai.stanford.edu/users/nilsson/OnlinePubs-Nils/PublishedPapers/strips.pdf), que aunque es ampliamente utilizado, a veces no proporciona la suficiente expresividad para abordar ciertos problemas complejos. Como resultado, se han desarrollado extensiones más avanzadas, como el [Action Description Language (ADL)](https://en.wikipedia.org/wiki/Action_description_language).
 
-_GraphPlan_ es un algoritmo fundamental que construye una gráfica de planificación para representar las secuencias de acciones necesarias para alcanzar un objetivo. Sin embargo, su complejidad ha llevado a la creación de los Fast Forward Planners, que utilizan una versión simplificada de esta gráfica para construir una heurística eficiente y guiar la búsqueda hacia soluciones rápidas usando algoritmos de búsqueda como A*.
+_GraphPlan_ es un algoritmo fundamental que construye una gráfica de planificación para representar las secuencias de acciones necesarias para alcanzar un objetivo usando el lenguaje ADL. Sin embargo, su complejidad ha llevado a la creación de los Fast Forward Planners, que utilizan una versión simplificada de esta gráfica para construir una heurística eficiente y guiar la búsqueda hacia soluciones rápidas usando algoritmos de búsqueda como A*.
 
 El algoritmo A* es una técnica de búsqueda heurística usada para encontrar la ruta más corta en un grafo. Utiliza una función de costo $f(n) = g(n) + h(n)$, donde $g(n)$ es el costo desde el nodo inicial hasta el nodo actual y $h(n)$ es una estimación heurística del costo desde el nodo actual hasta el objetivo, priorizando los nodos más prometedores para alcanzar el objetivo con el menor costo total.
 
@@ -48,6 +48,8 @@ A continuación, se presenta un ejemplo (ver imagen) que ilustra cómo se calcul
 <p align="center">
 <img src="images/ffp.png" width="500" height="430">
 </p>
+
+En este caso se puede observar que la menor heurística es la correspondiente al nuevo estado donde la gráfica de planeación nos indica que con las acciones se podría llegar al objetivo en el siguiente nivel. 
 
 ## Ejemplos
 
