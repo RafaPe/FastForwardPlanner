@@ -62,42 +62,33 @@ class Action:
         return list(set(state))
     
     def regression(self, state:list):
-        state = copy.deepcopy(state)
-
-        # Verificamos si no existe una inconsistencia respecto a las 
-        # precondiciones que se eliminan al aplicar la acción al estado
-        for removed_precondition in self.delete:
-            if removed_precondition in state:
+        # Se verifica si el estado es regresable por la acción,
+        # verificando si no existe una consistente con lo que se 
+        # añade o se quita debido a la acción
+        for remove_proposition in self.delete:
+            if remove_proposition in state:
                 return []
-
+        for added_proposition in self.effect:
+            if added_proposition not in state:
+                return []
+        
+        # Se forma la regresión 
+        regression_state = []
         if len(self.variants) > 0:
             for condition, variant_effect, variant_delete in self.variants:
-                # Se eliminan las precondiciones que se añaden por efecto de la variante de la acción
-                for added_proposition in variant_effect:
-                    # Si una precondición que se añade no se encuentra en las preposiciones del estado, 
-                    # se tiene que no existe un estado que al aplicarle la acción se llegue a state.
-                    # Esto es más restrictivo para cada variante de la acción, debido a que se tiene que 
-                    # verificar para cada una de ellas pues se quiere un estado que al aplicarle la 
-                    # acción nos deje en state
-                    try:
-                        state.remove(added_proposition)
-                    except:
+                for proposition in state:
+                    if proposition in variant_delete:
                         return []
-                for removed_proposition in variant_delete:
-                    state.append(removed_proposition)
-        else:
-            # Se eliminan las precondiciones que se añaden por efecto de la acción
-            for added_proposition in self.effect:
-                # Si una precondición que se añade no se encuentra en las preposiciones del estado, 
-                # se tiene que no existe un estado que al aplicarle la acción se llegue a state
-                try:
-                    state.remove(added_proposition)
-                except:
-                    return []
-            # Se añaden las precondiciones que se eliminan por efecto de la acción
-            for removed_proposition in self.delete:
-                state.append(removed_proposition)
-        return list(set(state))
+                    if proposition not in variant_effect:
+                        regression_state.append(proposition)
+                regression_state.append(condition)
+        for proposition in state:
+            if proposition not in self.effect:
+                regression_state.append(proposition)
+        for precondition in self.preconditions:
+            regression_state.append(precondition)
+
+        return list(set(regression_state))
 
     def __str__(self):
         return f'{self.name}'
@@ -136,30 +127,36 @@ def build_plan_graph(state:List[Proposition], goal:List[Proposition], actions:Li
             
     return graph_levels
 
-def graph_heuristic(state:List[Proposition], goal:List[Proposition], actions:List[Action]) -> int:
-    graph = build_plan_graph(state, goal, actions)
-    if len(graph) > 0:
-        return len(graph) - 1
-    else:
+def graph_heuristic_backward(state:List[Proposition],planning_graph:List[List[Proposition]]) -> int:
+    # Lo que se quiere es una heurística que indique en que nivel del grafo de 
+    # planificación se encuentran todas las proposiciones de state
+    try:
+        while not all(proposition in planning_graph[level] for proposition in state):
+            level += 1
+        return level
+    except:
         return float('inf')
 
-def fastforward_A_star(initial_node:Node, goal:List[Proposition], actions:List[Action]) -> str:
+def backward_A_star(initial_node:Node, goal:List[Proposition], actions:List[Action]) -> str:
+    # Se calcula la gráfica de planeación del estado inicial que se usará como heurística
+    planning_graph = build_plan_graph(initial_node.state,goal,actions)
+    
     frontier = [initial_node]
     while len(frontier) > 0:
         node = frontier.pop(0)
         
         if all(elem in node.state for elem in goal):
             return node.plan
-            break
             
         else:
             for action in actions:
-                new_state = action.apply(node.state)
+                # Los nuevos estados son las regresiones del estado actual
+                new_state = action.regression(node.state)
                    
                 if all(elem in node.state for elem in new_state) and all(elem in new_state for elem in node.state) :
                     pass
                 else:
-                    h = graph_heuristic(new_state, goal, actions)
+                    h = graph_heuristic_backward(new_state,planning_graph)
                     c = node.cost + 1
                     new_node = Node(new_state, c, h, copy.deepcopy(node.plan))
                     new_node.plan.append(action)
