@@ -72,21 +72,31 @@ class Action:
             if added_proposition not in state:
                 return []
         
-        # Se forma la regresión 
+        # Se forma la regresión. De manera general, se agregan 
+        # las proposiciones que la acción no añade y las precondiciones 
+        # de la acción para poder activarse 
         regression_state = []
+        # Cuando tiene variantes 
         if len(self.variants) > 0:
             for condition, variant_effect, variant_delete in self.variants:
+                for proposition in variant_delete:
+                    if proposition in state:
+                        break
+                for proposition in variant_effect:
+                    if proposition not in state:
+                        break
                 for proposition in state:
-                    if proposition in variant_delete:
-                        return []
                     if proposition not in variant_effect:
                         regression_state.append(proposition)
                 regression_state.append(condition)
-        for proposition in state:
-            if proposition not in self.effect:
+        else:
+            for proposition in state:
+                if proposition not in self.effect:
+                    regression_state.append(proposition)
+            for precondition in self.preconditions:
+                regression_state.append(precondition)
+            for proposition in self.delete:
                 regression_state.append(proposition)
-        for precondition in self.preconditions:
-            regression_state.append(precondition)
 
         return list(set(regression_state))
 
@@ -100,7 +110,6 @@ class Node:
         self.heuristic = heuristic
         self.function = cost + heuristic
         self.plan = plan
-
 
 def build_plan_graph(state:List[Proposition], goal:List[Proposition], actions:List[Action]) -> List[List[Proposition]]:   
     graph_levels = [state]
@@ -130,6 +139,7 @@ def build_plan_graph(state:List[Proposition], goal:List[Proposition], actions:Li
 def graph_heuristic_backward(state:List[Proposition],planning_graph:List[List[Proposition]]) -> int:
     # Lo que se quiere es una heurística que indique en que nivel del grafo de 
     # planificación se encuentran todas las proposiciones de state
+    level = 0
     try:
         while not all(proposition in planning_graph[level] for proposition in state):
             level += 1
@@ -140,13 +150,15 @@ def graph_heuristic_backward(state:List[Proposition],planning_graph:List[List[Pr
 def backward_A_star(initial_node:Node, goal:List[Proposition], actions:List[Action]) -> str:
     # Se calcula la gráfica de planeación del estado inicial que se usará como heurística
     planning_graph = build_plan_graph(initial_node.state,goal,actions)
-    
+
     frontier = [initial_node]
     while len(frontier) > 0:
         node = frontier.pop(0)
         
-        if all(elem in node.state for elem in goal):
-            return node.plan
+        if SameList(node.state,goal):
+            # Devuelve la lista de acciones en el orden 
+            # inverso a como se agregaron y esta es el plan
+            return node.plan[::-1]
             
         else:
             for action in actions:
@@ -166,3 +178,11 @@ def backward_A_star(initial_node:Node, goal:List[Proposition], actions:List[Acti
             frontier = sorted(frontier, key = lambda x: x.function)
             
     return 'THERE IS NOT A FEASIBLE PLAN'
+
+def SameList(state:List[Proposition],goal:List[Proposition]):
+    # Esta función permite decidir cuando dos listas son iguales
+    # tanto en tamaño como los elementos que contienen 
+    if len(state) == len(goal):
+        return all(proposition in state for proposition in goal)
+    else:
+        return False
